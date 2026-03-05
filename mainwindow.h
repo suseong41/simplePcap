@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <pcap/pcap.h>
 #include <string>
-
+#include <QstringListModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,5 +24,11 @@ public:
 private:
     Ui::MainWindow *ui;
     std::string devType;
+
+    bool isRunning;
+    QStringListModel *lenModel;
+    QStringListModel *typeModel;
+    QStringListModel *saModel;
+    QStringListModel *daModel;
 };
 #endif // MAINWINDOW_H
