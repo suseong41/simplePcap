@@ -16,7 +16,7 @@ public:
     void stopCap();
 
 signals:
-    void capPacket(QString len, QString type, Qstirng sip, QString dip);
+    void capPacket(QString len, QString type, QString sip, QString dip);
 private:
     void run();
     std::string device;

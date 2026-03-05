@@ -1,7 +1,5 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "./mac.h"
-
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -22,10 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     daModel = new QStringListModel(this);
     ui->daView->setModel(daModel);
+
+    pcapWorker = new Pcap(this);
+    connect(pcapWorker, &Pcap::capPacket, this, &MainWindow::onReceivePacket);
 }
 
 MainWindow::~MainWindow()
 {
+    pcapWorker->stopCap();
     delete ui;
 }
 
@@ -43,4 +45,19 @@ void MainWindow::onStartButton()
         isRunning = false;
         ui->runBtn->setText("Start");
     }
+}
+
+void MainWindow::onReceivePacket(QString len, QString type, QString sip, QString dip)
+{
+    lenList.append(len);
+    lenModel->setStringList(lenList);
+
+    typeList.append(type);
+    typeModel->setStringList(typeList);
+
+    saList.append(sip);
+    saModel->setStringList(saList);
+
+    daList.append(dip);
+    daModel->setStringList(daList);
 }
