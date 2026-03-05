@@ -1,0 +1,8 @@
+#!/bin/sh
+
+/Users/suseong/Qt/6.10.2/macos/libexec/qt-android-runner.py \
+    --adb "/Users/suseong/Library/Android/sdk/platform-tools/adb" \
+    --build-path "/Users/suseong/Qt/work/simplePcap/build/Qt_6_10_2_for_Android_arm64_v8a-Debug/android-build-simplePcap" \
+    --apk "/Users/suseong/Qt/work/simplePcap/build/Qt_6_10_2_for_Android_arm64_v8a-Debug/android-build-simplePcap/simplePcap.apk" \
+    $@
+

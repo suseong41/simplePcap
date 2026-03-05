@@ -1,0 +1,178 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-5326d6f2ea15bb8b4d1b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "simplePcap",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12,
+						13
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "_qt_internal_apk_dependencies::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-_qt_internal_apk_dependencies-Debug-04c682fc07b20c59c394.json",
+					"name" : "_qt_internal_apk_dependencies",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "aab::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-aab-Debug-4469f03457d7e909eb35.json",
+					"name" : "aab",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "aar::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-aar-Debug-fdecc165ccca22226dcb.json",
+					"name" : "aar",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "apk::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-apk-Debug-cd12bab3ef07db4f8ee6.json",
+					"name" : "apk",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "apk_all::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-apk_all-Debug-3413683cea7187ebc243.json",
+					"name" : "apk_all",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "qt_internal_plugins::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qt_internal_plugins-Debug-2e71cee4908c432f51db.json",
+					"name" : "qt_internal_plugins",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap-Debug-19e20f602890cdb4a209.json",
+					"name" : "simplePcap",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap_autogen-Debug-ae083576ac339ebc9715.json",
+					"name" : "simplePcap_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap_autogen_timestamp_deps-Debug-1879e8ef656d715ecbcd.json",
+					"name" : "simplePcap_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap_copy_apk_dependencies::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap_copy_apk_dependencies-Debug-c56de000775906c0de7f.json",
+					"name" : "simplePcap_copy_apk_dependencies",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap_make_aab::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap_make_aab-Debug-7e63d494f1d6c820a57b.json",
+					"name" : "simplePcap_make_aab",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap_make_aar::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap_make_aar-Debug-e8fc4a6fdb84acaef78f.json",
+					"name" : "simplePcap_make_aar",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap_make_apk::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap_make_apk-Debug-001137368a90fb84c944.json",
+					"name" : "simplePcap_make_apk",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "simplePcap_prepare_apk_dir::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-simplePcap_prepare_apk_dir-Debug-c7a30a93d3502db776a1.json",
+					"name" : "simplePcap_prepare_apk_dir",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/suseong/Qt/work/simplePcap/build/Qt_6_10_2_for_Android_arm64_v8a-Debug",
+		"source" : "/Users/suseong/Qt/work/simplePcap"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
