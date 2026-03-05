@@ -44,6 +44,7 @@ void Pcap::run()
     handle = pcap_open_live(device.c_str(), BUFSIZ, 1, 1000, errbuf);
     if(handle == nullptr)
     {
+        fprintf(stderr, "pcap_open_live failed: %s\n", errbuf);
         return;
     }
 

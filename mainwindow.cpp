@@ -9,17 +9,15 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(ui->runBtn, &QPushButton::clicked, this, &MainWindow::onStartButton);
 
-    lenModel = new QStringListModel(this);
-    ui->lenView->setModel(lenModel);
+    QStringList headers;
+    headers << "Len" << "Type" << "SourceIp" << "DestinationIp";
+    ui->packetTable->setColumnCount(4);
+    ui->packetTable->setHorizontalHeaderLabels(headers);
 
-    typeModel = new QStringListModel(this);
-    ui->typeView->setModel(typeModel);
-
-    saModel = new QStringListModel(this);
-    ui->saView->setModel(saModel);
-
-    daModel = new QStringListModel(this);
-    ui->daView->setModel(daModel);
+    ui->packetTable->setColumnWidth(0, 80);
+    ui->packetTable->setColumnWidth(1, 80);
+    ui->packetTable->setColumnWidth(2, 150);
+    ui->packetTable->setColumnWidth(3, 150);
 
     pcapWorker = new Pcap(this);
     connect(pcapWorker, &Pcap::capPacket, this, &MainWindow::onReceivePacket);
@@ -39,6 +37,7 @@ void MainWindow::onStartButton()
         ui->runBtn->setText("Stop");
 
         devType = ui->devIn->text().toStdString();
+        pcapWorker->runCap(devType);
     }
     else
     {
@@ -49,15 +48,11 @@ void MainWindow::onStartButton()
 
 void MainWindow::onReceivePacket(QString len, QString type, QString sip, QString dip)
 {
-    lenList.append(len);
-    lenModel->setStringList(lenList);
+    int row = ui->packetTable->rowCount();
+    ui->packetTable->insertRow(row);
 
-    typeList.append(type);
-    typeModel->setStringList(typeList);
-
-    saList.append(sip);
-    saModel->setStringList(saList);
-
-    daList.append(dip);
-    daModel->setStringList(daList);
+    ui->packetTable->setItem(row, 0, new QTableWidgetItem(len));
+    ui->packetTable->setItem(row, 1, new QTableWidgetItem(type));
+    ui->packetTable->setItem(row, 2, new QTableWidgetItem(sip));
+    ui->packetTable->setItem(row, 3, new QTableWidgetItem(dip));
 }

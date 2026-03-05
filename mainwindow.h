@@ -3,7 +3,7 @@
 #include <QMainWindow>
 #include <pcap/pcap.h>
 #include <string>
-#include <QStringListModel>
+#include <QTableWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,14 +28,4 @@ private:
 
     bool isRunning;
     Pcap *pcapWorker;
-
-    QStringListModel *lenModel;
-    QStringListModel *typeModel;
-    QStringListModel *saModel;
-    QStringListModel *daModel;
-
-    QStringList lenList;
-    QStringList typeList;
-    QStringList saList;
-    QStringList daList;
 };
