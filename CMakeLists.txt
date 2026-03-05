@@ -26,6 +26,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mac.h
         eth.h eth.cpp
         ip.h ip.cpp
+        .gitignore
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET simplePcap APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

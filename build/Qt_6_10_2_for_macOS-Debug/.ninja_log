@@ -1,9 +1,0 @@
-# ninja log v6
-204	784	1772674300392426593	CMakeFiles/simplePcap.dir/simplePcap_autogen/mocs_compilation.cpp.o	63776dc7961d4ca4
-8	37	1772677377486659613	simplePcap_autogen/mocs_compilation.cpp	f41a64b3a7c6038c
-8	37	1772677377486659613	/Users/suseong/Qt/work/simplePcap/build/Qt_6_10_2_for_macOS-Debug/simplePcap_autogen/timestamp	f41a64b3a7c6038c
-8	37	1772677377486659613	simplePcap_autogen/timestamp	f41a64b3a7c6038c
-8	37	1772677377486659613	/Users/suseong/Qt/work/simplePcap/build/Qt_6_10_2_for_macOS-Debug/simplePcap_autogen/mocs_compilation.cpp	f41a64b3a7c6038c
-204	792	1772674300392611009	CMakeFiles/simplePcap.dir/main.cpp.o	4d1a02c1826da33c
-37	747	1772677377515479611	CMakeFiles/simplePcap.dir/mainwindow.cpp.o	549258ecfa5acfd7
-748	830	1772677378226168296	simplePcap.app/Contents/MacOS/simplePcap	ad371a193da58904

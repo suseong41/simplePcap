@@ -1,2 +1,0 @@
-set(__QT_DEPLOY_TARGET_simplePcap_FILE /Users/suseong/Qt/work/simplePcap/build/Qt_6_10_2_for_Android_arm64_v8a-Debug/libsimplePcap_arm64-v8a.so)
-set(__QT_DEPLOY_TARGET_simplePcap_TYPE MODULE_LIBRARY)
