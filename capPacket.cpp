@@ -1,4 +1,6 @@
 #include "capPacket.h"
+#include "eth.h"
+#include "ip.h"
 
 Pcap::Pcap(QObject *parent) : QObject(parent)
 {
@@ -64,7 +66,27 @@ void Pcap::run()
             break;
         }
         QString lenStr = QString::number(header->len);
-        emit capPacket(lenStr, "Type", "SIP", "DIP");
+        ST_ETH* eth = (ST_ETH*)packet;
+        uint16_t etherType = htons(eth->len_type);
+        QString typeStr = "None";
+        QString sipStr = " ";
+        QString dipStr = " ";
+        if (etherType!=0x0800)
+        {
+            if (etherType == 0x0806) typeStr = "ARP";
+            emit capPacket(lenStr, typeStr, sipStr, dipStr);
+            continue;
+        }
+        ST_IP* ip = (ST_IP*)(packet+sizeof(ST_ETH));
+        uint8_t protoId = ip->proto_id;
+        if (protoId == 1) typeStr = "ICMP";
+        else if (protoId == 6) typeStr = "TCP";
+        else if (protoId == 17) typeStr = "UDP";
+        else typeStr = "IPv4";
+
+        sipStr = QString::number(ip->sip[0])+"."+QString::number(ip->sip[1])+"."+QString::number(ip->sip[2])+"."+QString::number(ip->sip[3]);
+        dipStr = QString::number(ip->dip[0])+"."+QString::number(ip->dip[1])+"."+QString::number(ip->dip[2])+"."+QString::number(ip->dip[3]);
+        emit capPacket(lenStr, typeStr, sipStr, dipStr);
     }
 
     pcap_close(handle);

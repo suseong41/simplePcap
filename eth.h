@@ -5,7 +5,6 @@
 #pragma pack(push, 1)
 struct ST_ETH
 {
-    uint64_t preamble;
     ST_MAC da;
     ST_MAC sa;
     uint16_t len_type;

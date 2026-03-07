@@ -9,15 +9,18 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     connect(ui->runBtn, &QPushButton::clicked, this, &MainWindow::onStartButton);
 
+    ui->devIn->addItem("en0");
+    ui->devIn->addItem("Wlan0");
+
     QStringList headers;
     headers << "Len" << "Type" << "SourceIp" << "DestinationIp";
     ui->packetTable->setColumnCount(4);
     ui->packetTable->setHorizontalHeaderLabels(headers);
 
-    ui->packetTable->setColumnWidth(0, 80);
+    ui->packetTable->setColumnWidth(0, 60);
     ui->packetTable->setColumnWidth(1, 80);
-    ui->packetTable->setColumnWidth(2, 150);
-    ui->packetTable->setColumnWidth(3, 150);
+    ui->packetTable->setColumnWidth(2, 135);
+    ui->packetTable->setColumnWidth(3, 135);
 
     pcapWorker = new Pcap(this);
     connect(pcapWorker, &Pcap::capPacket, this, &MainWindow::onReceivePacket);
@@ -33,10 +36,12 @@ void MainWindow::onStartButton()
 {
     if(isRunning == false)
     {
+        ui->packetTable->setRowCount(0);
+
         isRunning = true;
         ui->runBtn->setText("Stop");
 
-        devType = ui->devIn->text().toStdString();
+        devType = ui->devIn->currentText().toStdString();
         pcapWorker->runCap(devType);
     }
     else
@@ -51,8 +56,16 @@ void MainWindow::onReceivePacket(QString len, QString type, QString sip, QString
     int row = ui->packetTable->rowCount();
     ui->packetTable->insertRow(row);
 
-    ui->packetTable->setItem(row, 0, new QTableWidgetItem(len));
-    ui->packetTable->setItem(row, 1, new QTableWidgetItem(type));
-    ui->packetTable->setItem(row, 2, new QTableWidgetItem(sip));
-    ui->packetTable->setItem(row, 3, new QTableWidgetItem(dip));
+    QTableWidgetItem *itemLen = new QTableWidgetItem(len);
+    QTableWidgetItem *itemType = new QTableWidgetItem(type);
+    QTableWidgetItem *itemSip = new QTableWidgetItem(sip);
+    QTableWidgetItem *itemDip = new QTableWidgetItem(dip);
+
+    itemLen->setTextAlignment(Qt::AlignCenter);
+    itemType->setTextAlignment(Qt::AlignCenter);
+
+    ui->packetTable->setItem(row, 0, itemLen);
+    ui->packetTable->setItem(row, 1, itemType);
+    ui->packetTable->setItem(row, 2, itemSip);
+    ui->packetTable->setItem(row, 3, itemDip);
 }

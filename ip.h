@@ -1,8 +1,6 @@
 #pragma once
 #include <pcap/pcap.h>
 
-#include "mac.h"
-
 #pragma pack(push, 1)
 struct ST_IP
 {
