@@ -48,6 +48,7 @@ void MainWindow::onStartButton()
     {
         isRunning = false;
         ui->runBtn->setText("Start");
+        pcapWorker->stopCap();
     }
 }
 
