@@ -1,6 +1,7 @@
 #include "capPacket.h"
 #include "eth.h"
 #include "ip.h"
+#include "./sutrace.h"
 
 Pcap::Pcap(QObject *parent) : QObject(parent)
 {
@@ -46,7 +47,10 @@ void Pcap::run()
     handle = pcap_open_live(device.c_str(), BUFSIZ, 1, 1000, errbuf);
     if(handle == nullptr)
     {
-        fprintf(stderr, "pcap_open_live failed: %s\n", errbuf);
+        std::string errMsg = "pcap_opne_live failed: ";
+        errMsg += errbuf;
+        TRACE(errMsg);
+        emit errorBox(QString(errbuf));
         return;
     }
 

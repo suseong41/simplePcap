@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>486</width>
-    <height>600</height>
+    <width>370</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>0</y>
-      <width>451</width>
+      <width>341</width>
       <height>41</height>
      </rect>
     </property>
@@ -46,10 +46,10 @@
    <widget class="QTableWidget" name="packetTable">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>50</y>
-      <width>451</width>
-      <height>481</height>
+      <width>341</width>
+      <height>471</height>
      </rect>
     </property>
    </widget>
@@ -59,7 +59,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>486</width>
+     <width>370</width>
      <height>33</height>
     </rect>
    </property>

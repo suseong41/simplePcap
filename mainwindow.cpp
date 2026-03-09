@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
+#include "./device.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -7,23 +8,38 @@ MainWindow::MainWindow(QWidget *parent)
     , isRunning(false)
 {
     ui->setupUi(this);
+    this->setWindowTitle("Suseong Pcap");
+    //this->setFixedSize(400, 600);
     connect(ui->runBtn, &QPushButton::clicked, this, &MainWindow::onStartButton);
 
-    ui->devIn->addItem("en0");
-    ui->devIn->addItem("Wlan0");
+    ui->devIn->clear();
+    std::vector<std::string> devs = Device::getInstance().getDevices();
+    std::vector<std::string>::iterator it = devs.begin();
 
+    while(it != devs.end())
+    {
+        ui->devIn->addItem(QString::fromStdString(*it));
+        it++;
+    }
+
+    #ifdef Q_OS_ANDROID
+    int resSu = std::system("su -c 'echo root_check'");
+    if(resSu != 0) {return;}
+    #endif
     QStringList headers;
     headers << "Len" << "Type" << "SourceIp" << "DestinationIp";
     ui->packetTable->setColumnCount(4);
     ui->packetTable->setHorizontalHeaderLabels(headers);
-
-    ui->packetTable->setColumnWidth(0, 60);
-    ui->packetTable->setColumnWidth(1, 80);
-    ui->packetTable->setColumnWidth(2, 135);
-    ui->packetTable->setColumnWidth(3, 135);
+    ui->packetTable->setColumnWidth(0, 45);
+    ui->packetTable->setColumnWidth(1, 45);
+    ui->packetTable->setColumnWidth(2, 125);
+    ui->packetTable->setColumnWidth(3, 125);
+    ui->packetTable->verticalHeader()->setVisible(false);
 
     pcapWorker = new Pcap(this);
-    connect(pcapWorker, &Pcap::capPacket, this, &MainWindow::onReceivePacket);
+    connect(pcapWorker, &Pcap::capPacket, this, &MainWindow::onReceivePacket, Qt::QueuedConnection);
+
+    connect(pcapWorker, &Pcap::errorBox, this, &MainWindow::onError, Qt::QueuedConnection);
 }
 
 MainWindow::~MainWindow()
@@ -50,6 +66,18 @@ void MainWindow::onStartButton()
         ui->runBtn->setText("Start");
         pcapWorker->stopCap();
     }
+}
+
+void MainWindow::onError(QString msg)
+{
+    QMessageBox::critical(this, "Pcap open error", msg);
+
+    if(isRunning == true)
+    {
+        isRunning = false;
+        ui->runBtn->setText("Start");
+    }
+
 }
 
 void MainWindow::onReceivePacket(QString len, QString type, QString sip, QString dip)

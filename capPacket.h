@@ -17,6 +17,8 @@ public:
 
 signals:
     void capPacket(QString len, QString type, QString sip, QString dip);
+    void errorBox(QString msg);
+
 private:
     void run();
     std::string device;
