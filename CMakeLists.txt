@@ -29,6 +29,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         mac.h
         device.h device.cpp
         sutrace.h sutrace.cpp
+        capPacket.cpp capPacket.h
     )
 # 안드로이드 빌드에 경우 패키지 소스 지정
 # Define target properties for Android with Qt 6 as:

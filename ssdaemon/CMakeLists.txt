@@ -11,6 +11,7 @@ set(SOURCES
     ../ip.cpp ../ip.h
     ../mac.h
     ../sutrace.cpp ../sutrace.h
+    ../capPacket.cpp ../capPacket.h
 )
 
 add_executable(ssdaemon ${SOURCES})
@@ -27,5 +28,9 @@ if(ANDROID)
     add_custom_command(TARGET ssdaemon POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/../android/assets
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ssdaemon> ${CMAKE_CURRENT_SOURCE_DIR}/../android/assets/ssdaemon
+    )
+elseif(APPLE)
+    add_custom_command(TARGET ssdaemon POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ssdaemon> ${CMAKE_CURRENT_BINARY_DIR}/../simplePcap.app/Contents/MacOS/ssdaemon
     )
 endif()

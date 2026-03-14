@@ -10,6 +10,6 @@ void Sutrace::print(const char* file, int line, const char* func, const std::str
         fileStr = fileStr.substr(pos+1);
     }
 
-    QString traceMsg = QString("[%1:%2] %3() - %4").arg(fileStr.c_str()).arg(line).arg(func).arg(msg.c_str());
-    qDebug().noquote() << traceMsg;
+    printf("[%s:%d] %s() - %s\n", fileStr.c_str(), line, func, msg.c_str());
+    fflush(stdout);
 }

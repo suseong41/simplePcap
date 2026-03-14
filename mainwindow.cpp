@@ -22,23 +22,6 @@ MainWindow::MainWindow(QWidget *parent)
         it++;
     }
 
-
-    #ifdef Q_OS_ANDROID
-    int resSu = std::system("su -c 'root chk'");
-    if(resSu != 0) return;
-
-    QString targetPath = dropPcapDaemon();
-    if(targetPath != "")
-    {
-        daemonProcess = new QProcess(this);
-        QStringList args;
-        args << "-c" << "targetPath";
-        connect(daemonProcess, &QProcess::readyReadStandardOutput, this, &MainWindow::onDaemonOutput);
-        daemonProcess->start("su", args);
-    }
-    #endif
-
-
     QStringList headers;
     headers << "Len" << "Type" << "SourceIp" << "DestinationIp";
     ui->packetTable->setColumnCount(4);
@@ -49,15 +32,19 @@ MainWindow::MainWindow(QWidget *parent)
     ui->packetTable->setColumnWidth(3, 125);
     ui->packetTable->verticalHeader()->setVisible(false);
 
-    pcapWorker = new Pcap(this);
-    connect(pcapWorker, &Pcap::capPacket, this, &MainWindow::onReceivePacket, Qt::QueuedConnection);
-
-    connect(pcapWorker, &Pcap::errorBox, this, &MainWindow::onError, Qt::QueuedConnection);
+    daemonProcess = new QProcess(this);
+    connect(daemonProcess, &QProcess::readyReadStandardOutput, this, &MainWindow::onDaemonOutput);
 }
 
 MainWindow::~MainWindow()
 {
-    pcapWorker->stopCap();
+    if(daemonProcess != nullptr)
+    {
+        if(daemonProcess->state() == QProcess::Running)
+        {
+            daemonProcess->kill();
+        }
+    }
     delete ui;
 }
 
@@ -71,13 +58,34 @@ void MainWindow::onStartButton()
         ui->runBtn->setText("Stop");
 
         devType = ui->devIn->currentText().toStdString();
-        pcapWorker->runCap(devType);
+        QStringList args;
+
+#ifdef Q_OS_ANDROID
+        int resSu = std::system("su -c 'root chk'");
+        if(resSu != 0) return;
+        QString targetPath = dropPcapDaemon();
+        if(targetPath != "")
+        {
+            args << "-c" << targetPath << QString::fromStdString(devType);
+            daemonProcess->start("su", args);
+        }
+#elif defined(Q_OS_MAC)
+        QString targetPath = QCoreApplication::applicationDirPath() + "/ssdaemon";
+        args << QString::fromStdString(devType);
+        daemonProcess->start(targetPath, args);
+#endif
     }
     else
     {
         isRunning = false;
         ui->runBtn->setText("Start");
-        pcapWorker->stopCap();
+        if(daemonProcess != nullptr)
+        {
+            if(daemonProcess->state() == QProcess::Running)
+            {
+                daemonProcess->kill();
+            }
+        }
     }
 }
 

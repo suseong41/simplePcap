@@ -10,6 +10,7 @@
 #include <QStandardPaths>
 #include <QDebug>
 #include <QProcess>
+#include <QCoreApplication>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -36,8 +37,6 @@ private:
     std::string devType;
 
     bool isRunning;
-    Pcap *pcapWorker;
-
     QProcess *daemonProcess;
 };
 
