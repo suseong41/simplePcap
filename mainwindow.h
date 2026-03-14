@@ -5,6 +5,11 @@
 #include <string>
 #include <QTableWidget>
 #include <QMessageBox>
+#include <QFile>
+#include <QDir>
+#include <QStandardPaths>
+#include <QDebug>
+#include <QProcess>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -24,6 +29,7 @@ public slots:
     void onStartButton();
     void onReceivePacket(QString len, QString type, QString sip, QString dip);
     void onError(QString msg);
+    void onDaemonOutput();
 
 private:
     Ui::MainWindow *ui;
@@ -31,4 +37,8 @@ private:
 
     bool isRunning;
     Pcap *pcapWorker;
+
+    QProcess *daemonProcess;
 };
+
+static QString dropPcapDaemon();

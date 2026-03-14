@@ -9,6 +9,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 데몬 먼저 빌드
+add_subdirectory(ssdaemon)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
@@ -24,17 +27,17 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
         mac.h
-        eth.h eth.cpp
-        ip.h ip.cpp
-        .gitignore
-        capPacket.h capPacket.cpp
         device.h device.cpp
         sutrace.h sutrace.cpp
     )
+# 안드로이드 빌드에 경우 패키지 소스 지정
 # Define target properties for Android with Qt 6 as:
-#    set_property(TARGET simplePcap APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+#if(ANDROID)
+    set_target_properties(simplePcap PROPERTIES
+        QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+#endif()
+
 else()
     if(ANDROID)
         add_library(simplePcap SHARED
@@ -62,7 +65,6 @@ endif()
 # pcap 헤더 파일 포함 | pcap 소스 파일에서 VERSION 파일 이름 변경 필요
 target_include_directories(simplePcap PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../libpcap")
 
-
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
@@ -83,6 +85,9 @@ install(TARGETS simplePcap
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+# 종속성 및 복사 수
+add_dependencies(simplePcap ssdaemon)
 
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(simplePcap)

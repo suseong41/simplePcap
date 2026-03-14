@@ -1,36 +1,36 @@
 #include "device.h"
 
-Device& Device::getInstance()
-{
-    static Device instance;
-    return instance;
-}
-
 Device::Device(){}
 Device::~Device(){}
 
-std::vector<std::string> Device::getDevices()
+Device& Device::getInstance()
+{
+    static Device device;
+    return device;
+}
+
+std::vector<std::string> Device::getDevice()
 {
     std::vector<std::string> devList;
     char errbuf[PCAP_ERRBUF_SIZE];
-    pcap_if_t* alldev;
-    pcap_if_t* dev;
+    pcap_if_t* alldevs;
+    pcap_if_t* d;
 
-    if(pcap_findalldevs(&alldev, errbuf) == -1)
+    const int res = pcap_findalldevs(&alldevs, errbuf);
+    if (res != 0)
     {
+        // error
         return devList;
     }
 
-    dev = alldev;
-    while(dev != nullptr)
+    for (d = alldevs; d != NULL; d = d->next)
     {
-        if(dev->name != nullptr)
+        if(d->name != NULL)
         {
-            devList.push_back(std::string(dev->name));
+            devList.push_back(std::string(d->name));
         }
-        dev = dev->next;
     }
 
-    pcap_freealldevs(alldev);
+    pcap_freealldevs(alldevs);
     return devList;
 }
