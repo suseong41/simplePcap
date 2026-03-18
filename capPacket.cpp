@@ -19,7 +19,7 @@ void Pcap::runCap(const std::string& dev)
     device = dev;
     isRunning = true;
 
-    handle = pcap_open_live(device.c_str(), BUFSIZ, 1, 1000, errbuf);
+    handle = pcap_open_live(device.c_str(), BUFSIZ, 1, 1, errbuf);
     if(handle == nullptr)
     {
         std::string errMsg = "pcap_opne_live failed: ";
@@ -48,13 +48,20 @@ void Pcap::runCap(const std::string& dev)
 
         ST_ETH* eth = (ST_ETH*)packet;
         uint16_t etherType = htons(eth->len_type);
-        std::string typeStr = "None";
+
+        ST_INFO info = {0};
+        info.len = header->len;
+        info.chk_code = 0xABCD1234;
+
+        std::string typeStr = "UNKNOWN";
         std::string sipStr = " ";
         std::string dipStr = " ";
+
         if (etherType!=0x0800)
         {
             if (etherType == 0x0806) typeStr = "ARP";
-            printf("%d|%s|%s|%s\n", header->len, typeStr.c_str(), sipStr.c_str(), dipStr.c_str());
+            snprintf(info.type, sizeof(info.type), "%s", typeStr.c_str());
+            fwrite(&info, sizeof(ST_INFO), 1, stdout);
             fflush(stdout);
             continue;
         }
@@ -65,12 +72,12 @@ void Pcap::runCap(const std::string& dev)
         else if (protoId == 17) typeStr = "UDP";
         else typeStr = "IPv4";
 
-        char sipBuf[16];
-        char dipBuf[16];
-        snprintf(sipBuf, sizeof(sipBuf), "%d.%d.%d.%d", ip->sip[0], ip->sip[1], ip->sip[2], ip->sip[3]);
-        snprintf(dipBuf, sizeof(dipBuf), "%d.%d.%d.%d", ip->dip[0], ip->dip[1], ip->dip[2], ip->dip[3]);
-        printf("%d|%s|%s|%s\n", header->len, typeStr.c_str(), sipBuf, dipBuf);
+        snprintf(info.type, sizeof(info.type), "%s", typeStr.c_str());
+        snprintf(info.sip, sizeof(info.sip), "%d.%d.%d.%d", ip->sip[0], ip->sip[1], ip->sip[2], ip->sip[3]);
+        snprintf(info.dip, sizeof(info.dip), "%d.%d.%d.%d", ip->dip[0], ip->dip[1], ip->dip[2], ip->dip[3]);
+        fwrite(&info, sizeof(ST_INFO), 1, stdout);
         fflush(stdout);
+
     }
 
     pcap_close(handle);

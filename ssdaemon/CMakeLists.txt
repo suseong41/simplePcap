@@ -12,11 +12,15 @@ set(SOURCES
     ../mac.h
     ../sutrace.cpp ../sutrace.h
     ../capPacket.cpp ../capPacket.h
+
 )
 
 add_executable(ssdaemon ${SOURCES})
 
 target_include_directories(ssdaemon PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libpcap")
+# library "libc++_shared.so" not found: needed by main executable 해결을 위한
+# 정적 라이브러리 링크
+target_link_options(ssdaemon PRIVATE "-static-libstdc++")
 
 if(APPLE)
     target_link_libraries(ssdaemon PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libpcap/build/Qt_6_10_2_for_macOS-Debug/libpcap.a")

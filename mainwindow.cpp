@@ -32,8 +32,25 @@ MainWindow::MainWindow(QWidget *parent)
     ui->packetTable->setColumnWidth(3, 125);
     ui->packetTable->verticalHeader()->setVisible(false);
 
+    // 텍스트 편집 차단
+    ui->packetTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    // 표 선택 차단
+    ui->packetTable->setSelectionMode(QAbstractItemView::NoSelection);
+    ui->packetTable->setFocusPolicy(Qt::NoFocus);
+    // 제스터 최적화
+    QScroller::grabGesture(ui->packetTable->viewport(), QScroller::TouchGesture);
+    // 오버스크롤 차단
+    QScroller* scroller = QScroller::scroller(ui->packetTable->viewport());
+    QScrollerProperties props = scroller->scrollerProperties();
+
+    props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
+    scroller->setScrollerProperties(props);
+
+
     daemonProcess = new QProcess(this);
     connect(daemonProcess, &QProcess::readyReadStandardOutput, this, &MainWindow::onDaemonOutput);
+    connect(daemonProcess, &QProcess::readyReadStandardError, this, &MainWindow::onDaemonError);
 }
 
 MainWindow::~MainWindow()
@@ -61,8 +78,8 @@ void MainWindow::onStartButton()
         QStringList args;
 
 #ifdef Q_OS_ANDROID
-        int resSu = std::system("su -c 'root chk'");
-        if(resSu != 0) return;
+        //int resSu = std::system("su -c 'root chk'");
+        //if(resSu != 0) return;
         QString targetPath = dropPcapDaemon();
         if(targetPath != "")
         {
@@ -124,9 +141,30 @@ void MainWindow::onDaemonOutput()
 {
     if(daemonProcess == nullptr) return;
     QByteArray output = daemonProcess->readAllStandardOutput();
-    QString outputStr = QString::fromUtf8(output);
+    packetBuffer.append(output);
 
-    qDebug() << "[Daemon] " << outputStr;
+    while(sizeof(ST_INFO) <= packetBuffer.size())
+    {
+        ST_INFO* info = (ST_INFO*)packetBuffer.data();
+        if (info->chk_code != 0xABCD1234) continue;
+        QString lenStr = QString::number(info->len);
+        QString typeStr = QString::fromUtf8(info->type);
+        QString sipStr = QString::fromUtf8(info->sip);
+        QString dipStr = QString::fromUtf8(info->dip);
+
+        onReceivePacket(lenStr, typeStr, sipStr, dipStr);
+        packetBuffer.remove(0, sizeof(ST_INFO));
+    }
+}
+
+void MainWindow::onDaemonError()
+{
+    if(daemonProcess != nullptr)
+    {
+        QByteArray errorOutput = daemonProcess->readAllStandardError();
+        QString errorStr = QString::fromUtf8(errorOutput);
+        qDebug() << "[DAEMON ERROR]" << errorStr;
+    }
 }
 
 static QString dropPcapDaemon()

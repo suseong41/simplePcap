@@ -10,6 +10,6 @@ void Sutrace::print(const char* file, int line, const char* func, const std::str
         fileStr = fileStr.substr(pos+1);
     }
 
-    printf("[%s:%d] %s() - %s\n", fileStr.c_str(), line, func, msg.c_str());
-    fflush(stdout);
+    fprintf(stderr, "[%s:%d] %s() - %s\n", fileStr.c_str(), line, func, msg.c_str());
+    fflush(stderr);
 }

@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    qDebug() << "Debuger Hello";
+    qDebug() << "Debugger Hello";
     MainWindow w;
     w.show();
     return a.exec();

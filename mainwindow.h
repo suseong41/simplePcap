@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QProcess>
 #include <QCoreApplication>
+#include <QScroller>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -26,11 +27,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-public slots:
     void onStartButton();
     void onReceivePacket(QString len, QString type, QString sip, QString dip);
     void onError(QString msg);
     void onDaemonOutput();
+    void onDaemonError();
 
 private:
     Ui::MainWindow *ui;
@@ -38,6 +39,8 @@ private:
 
     bool isRunning;
     QProcess *daemonProcess;
+
+    QByteArray packetBuffer;
 };
 
 static QString dropPcapDaemon();
