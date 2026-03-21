@@ -1,10 +1,8 @@
 #pragma once
 #include "./capPacket.h"
 #include <QMainWindow>
-#include <pcap/pcap.h>
 #include <string>
 #include <QTableWidget>
-#include <QMessageBox>
 #include <QFile>
 #include <QDir>
 #include <QStandardPaths>
@@ -29,7 +27,6 @@ public:
 
     void onStartButton();
     void onReceivePacket(QString len, QString type, QString sip, QString dip);
-    void onError(QString msg);
     void onDaemonOutput();
     void onDaemonError();
 

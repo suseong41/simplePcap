@@ -31,6 +31,6 @@ public:
 private:
     std::string device;
     bool isRunning;
-    pcap_t* handle;
+    pcap_t* pcap;
     char errbuf[PCAP_ERRBUF_SIZE];
 };

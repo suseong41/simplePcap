@@ -1,4 +1,5 @@
 #include "../capPacket.h"
+#include "../sutrace.h"
 #include <stdio.h>
 #include <string>
 
@@ -6,8 +7,7 @@ int main(int argc, char* argv[])
 {
     if(argc < 2)
     {
-        printf("No Device Detected");
-        fflush(stdout);
+        TRACE("No Device Detected");
         return 1;
     }
 

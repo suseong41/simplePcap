@@ -42,7 +42,6 @@ MainWindow::MainWindow(QWidget *parent)
     // 오버스크롤 차단
     QScroller* scroller = QScroller::scroller(ui->packetTable->viewport());
     QScrollerProperties props = scroller->scrollerProperties();
-
     props.setScrollMetric(QScrollerProperties::VerticalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
     props.setScrollMetric(QScrollerProperties::HorizontalOvershootPolicy, QScrollerProperties::OvershootAlwaysOff);
     scroller->setScrollerProperties(props);
@@ -78,8 +77,6 @@ void MainWindow::onStartButton()
         QStringList args;
 
 #ifdef Q_OS_ANDROID
-        //int resSu = std::system("su -c 'root chk'");
-        //if(resSu != 0) return;
         QString targetPath = dropPcapDaemon();
         if(targetPath != "")
         {
@@ -106,17 +103,6 @@ void MainWindow::onStartButton()
     }
 }
 
-void MainWindow::onError(QString msg)
-{
-    QMessageBox::critical(this, "Pcap open error", msg);
-
-    if(isRunning == true)
-    {
-        isRunning = false;
-        ui->runBtn->setText("Start");
-    }
-
-}
 
 void MainWindow::onReceivePacket(QString len, QString type, QString sip, QString dip)
 {
@@ -140,6 +126,7 @@ void MainWindow::onReceivePacket(QString len, QString type, QString sip, QString
 void MainWindow::onDaemonOutput()
 {
     if(daemonProcess == nullptr) return;
+    // QByteArray const char *와 매우 유사, 암묵적으로 utf-8로 해석
     QByteArray output = daemonProcess->readAllStandardOutput();
     packetBuffer.append(output);
 

@@ -6,7 +6,7 @@
 Pcap::Pcap()
 {
     isRunning = false;
-    handle = nullptr;
+    pcap = nullptr;
 }
 
 Pcap::~Pcap()
@@ -19,14 +19,12 @@ void Pcap::runCap(const std::string& dev)
     device = dev;
     isRunning = true;
 
-    handle = pcap_open_live(device.c_str(), BUFSIZ, 1, 1, errbuf);
-    if(handle == nullptr)
+    pcap = pcap_open_live(device.c_str(), BUFSIZ, 1, 1, errbuf);
+    if(pcap == nullptr)
     {
         std::string errMsg = "pcap_opne_live failed: ";
         errMsg += errbuf;
         TRACE(errMsg);
-        printf("ERROR|%s\n", errMsg.c_str());
-        fflush(stdout);
         return;
     }
 
@@ -36,7 +34,7 @@ void Pcap::runCap(const std::string& dev)
 
     while(isRunning == true)
     {
-        res = pcap_next_ex(handle, &header, &packet);
+        res = pcap_next_ex(pcap, &header, &packet);
         if(res == 0)
         {
             continue;
@@ -75,21 +73,27 @@ void Pcap::runCap(const std::string& dev)
         snprintf(info.type, sizeof(info.type), "%s", typeStr.c_str());
         snprintf(info.sip, sizeof(info.sip), "%d.%d.%d.%d", ip->sip[0], ip->sip[1], ip->sip[2], ip->sip[3]);
         snprintf(info.dip, sizeof(info.dip), "%d.%d.%d.%d", ip->dip[0], ip->dip[1], ip->dip[2], ip->dip[3]);
+        //size_t fwrite(
+        //    const void *buffer,
+        //    size_t size,
+        //    size_t count,
+        //    FILE *stream
+        //    );
         fwrite(&info, sizeof(ST_INFO), 1, stdout);
         fflush(stdout);
 
     }
 
-    pcap_close(handle);
-    handle = nullptr;
+    pcap_close(pcap);
+    pcap = nullptr;
 }
 
 void Pcap::stopCap()
 {
     isRunning = false;
-    if(handle != nullptr)
+    if(pcap != nullptr)
     {
-        pcap_breakloop(handle);
+        pcap_breakloop(pcap);
     }
 }
 

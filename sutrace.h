@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
 
-#ifndef NDEBUG
+#ifndef NDEBUG // 디버그
     #define TRACE(msg) Sutrace::print(__FILE__, __LINE__, __func__, msg)
-#else
+#else // 릴리즈
     #define TRACE(msg)
 #endif
 

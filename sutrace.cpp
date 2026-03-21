@@ -3,7 +3,7 @@
 void Sutrace::print(const char* file, int line, const char* func, const std::string& msg)
 {
     std::string fileStr = file;
-    size_t pos = fileStr.find_last_of("/\\");
+    size_t pos = fileStr.find_last_of("/");
 
     if(pos != std::string::npos)
     {

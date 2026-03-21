@@ -18,6 +18,7 @@ set(SOURCES
 add_executable(ssdaemon ${SOURCES})
 
 target_include_directories(ssdaemon PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libpcap")
+
 # library "libc++_shared.so" not found: needed by main executable 해결을 위한
 # 정적 라이브러리 링크
 target_link_options(ssdaemon PRIVATE "-static-libstdc++")
@@ -28,13 +29,14 @@ elseif(ANDROID)
     target_link_libraries(ssdaemon PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../../libpcap/build/Qt_6_10_2_for_Android_arm64_v8a-Debug/libpcap.a")
 endif()
 
-if(ANDROID)
+# POST_BUILD: 명령이 대상이 빌드된 후에 실행된다는 것을 지정합니다.
+if(APPLE)
+    add_custom_command(TARGET ssdaemon POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ssdaemon> ${CMAKE_CURRENT_BINARY_DIR}/../simplePcap.app/Contents/MacOS/ssdaemon
+    )
+elseif(ANDROID)
     add_custom_command(TARGET ssdaemon POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/../android/assets
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ssdaemon> ${CMAKE_CURRENT_SOURCE_DIR}/../android/assets/ssdaemon
-    )
-elseif(APPLE)
-    add_custom_command(TARGET ssdaemon POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:ssdaemon> ${CMAKE_CURRENT_BINARY_DIR}/../simplePcap.app/Contents/MacOS/ssdaemon
     )
 endif()
